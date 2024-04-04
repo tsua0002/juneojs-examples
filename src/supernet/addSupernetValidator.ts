@@ -22,12 +22,12 @@ async function main() {
   ]
   const utxoSet: Utxo[] = await fetchUtxos(provider.platform, sendersAddresses)
   const fee: number = (await provider.info.getTxFee()).addSupernetValidatorFee
-  const nodeId: string = 'NodeID-B2GHMQ8GF6FyrvmPUX6miaGeuVLH9UwHr'
+  const nodeId: string = 'NodeID-3VELiL3Hp6uFjAoFZEJpjM7PvQebidBGM'
   const startTime: bigint = now() + BigInt(30)
-  const durationInDays: number = 4
+  const durationInDays: number = 100
   const endTime: bigint = startTime + BigInt(3600 * 24 * durationInDays + 30)
   const weight: bigint = BigInt(100)
-  const supernetId: string = 'ZxTjijy4iNthRzuFFzMH5RS2BgJemYxwgZbzqzEhZJWqSnwhP'
+  const supernetId: string = '2MBKX8g2K8HVfGpUfEEfAzEF27BmkcRdexiNjunJ69ScNB8tAW'
   const createSupernetTx: CreateSupernetTransaction =
     CreateSupernetTransaction.parse(
       (await provider.platform.getTx(supernetId)).tx,

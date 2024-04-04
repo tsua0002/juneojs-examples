@@ -8,6 +8,7 @@ import {
   fetchUtxos,
   now,
 } from 'juneojs'
+import { initializeNodeId } from './nodeId';
 
 dotenv.config()
 async function main() {
@@ -21,9 +22,10 @@ async function main() {
     wallet.getWallet(provider.platform.chain),
   )
   // the node id where to delegate funds
-  const nodeId: string = 'NodeID-DXGCAZFrcwfBmgXMePrTm2EU8N3s46wEq'
+  let nodeid = await initializeNodeId()
+  const nodeId: string = nodeid
   // the amount to delegate
-  const stakeAmount: bigint = BigInt(1000000000)
+  const stakeAmount: bigint = BigInt(10000000000)
   // the time to start delegation (must be > now)
   const startTime: bigint = now() + BigInt(30)
   // the time to end the delegation with start time is staking period

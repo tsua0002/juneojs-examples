@@ -22,18 +22,17 @@ async function main() {
   ]
   const utxoSet: Utxo[] = await fetchUtxos(provider.platform, sendersAddresses)
   const fee: number = (await provider.info.getTxFee()).createBlockchainTxFee
-  const supernetId: string = 'ZxTjijy4iNthRzuFFzMH5RS2BgJemYxwgZbzqzEhZJWqSnwhP'
+  const supernetId: string = '2MBKX8g2K8HVfGpUfEEfAzEF27BmkcRdexiNjunJ69ScNB8tAW'
   const createSupernetTx: CreateSupernetTransaction =
     CreateSupernetTransaction.parse(
       (await provider.platform.getTx(supernetId)).tx,
     )
-  const chainName: string = 'Chain A'
+  const chainName: string = 'GaloisField Chain'
   const vmId: DynamicId = new DynamicId('supernetevm')
   const fxIds: DynamicId[] = []
-  const chainId: number = 330333
-  const genesisMintAddress: string =
-    '0x44542FD7C3F096aE54Cc07833b1C0Dcf68B7790C'
-  const genesisMintAmount: bigint = BigInt('1000000000000000000000000')
+  const chainId: number = 321314
+  const genesisMintAddress: string = '0x4F1d1fbA60988f369ecF3638a6b57e93736E4806'
+  const genesisMintAmount: bigint = BigInt('210000000000000000000000000000')
   const genesisData: string = new SupernetEVMGenesis(chainId, [
     new EVMAllocation(genesisMintAddress, genesisMintAmount),
   ]).generate()

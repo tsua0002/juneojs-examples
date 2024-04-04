@@ -13,8 +13,34 @@ import {
   UtxoAccount,
   JVMAccount,
 } from 'juneojs'
+const { exec } = require('node:child_process')
 
 dotenv.config()
+
+// Wrap the exec call in a promise
+function executeCommand(command) {
+    return new Promise((resolve, reject) => {
+        exec(command, (err, output) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(output.trim()); // trim() to remove any leading/trailing whitespace
+        });
+    });
+}
+
+// Define a function to initialize nodeid
+async function initializeNodeId() {
+    try {
+        const output = await executeCommand('./../node_id.sh');
+        return output;
+    } catch (err) {
+        console.error("could not execute command: ", err);
+        return null; // or handle the error as needed
+    }
+}
+
 async function main() {
   const provider: MCNProvider = new MCNProvider()
   const wallet: MCNWallet = MCNWallet.recover(process.env.MNEMONIC ?? '')
@@ -23,7 +49,7 @@ async function main() {
   // getting the account of one chain
   // note that if you are trying to retrieve the account of a chain that is not registered
   // in the creation of the MCNAccount you will get an error
-  const account: ChainAccount = mcnAccount.getAccount(SocotraJUNEChain.id)
+  const account: ChainAccount = mcnAccount.getAccount(SocotraJUNEChain.id) //Yes Here a comment in end of line
   // we can fetch the balances
   // it can be done individually
   await account.fetchBalance(SocotraJUNEAsset.assetId)
@@ -38,17 +64,21 @@ async function main() {
     provider,
     SocotraJUNEAsset.assetId,
   )
-  // or with a TokenAsset that already holds information about the asset (type, name, symbol, decimals)
+  let nodeid = await initializeNodeId(); 
+  console.log(nodeid)
+    // or with a TokenAsset that already holds information about the asset (type, name, symbol, decimals)
   balance = account.getAssetBalance(SocotraJUNEAsset)
+ 
+  console.log(account.addresses)
   // the returned balance will be an AssetValue which contains useful methods
   // this is the value that must be used to create transactions
-  console.log(balance.value)
+  console.log("Balance AssetValue: " + balance.value)
   // this value is human friendly and shows all the decimals
-  console.log(balance.getReadableValue())
+  console.log("Readable balance in JUNE: " + balance.getReadableValue())
   // this value is rounded down up to 2 decimals
-  console.log(balance.getReadableValueRounded())
+  console.log("Value rounded up to 2 decimals: " + balance.getReadableValueRounded())
   // this value is rounded down up to 6 decimals
-  console.log(balance.getReadableValueRounded(6))
+  console.log("Balance rounded down up to 6 decimals: " + balance.getReadableValueRounded(6))
 
   // note that the JVM-Chain and Platform-Chain are both utxo accounts
   // and EVM chains are using nonce accounts
